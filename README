@@ -26,10 +26,15 @@ select count(*)
 from dpr_pur.use_data_chemical d
 join dpr_pur.pur_shape p on d.year = p.year and d.use_no =p.use_no and d.prodno = p.prodno
 
-# Identify use numbers without a centroid (do not join)
+### Identify use numbers without a centroid (do not join)
 SELECT *
 FROM dpr_pur.use_data_chemical d
 LEFT JOIN dpr_pur.pur_shape p ON d.year = p.year AND d.use_no =p.use_no AND d.prodno = p.prodno
 WHERE p.prodno IS NULL
 
+
+### check for comtrs in comtrs file
+SELECT *
+FROM bmain.sections p
+WHERE p.co_mtr == "08H19N01W32"
 
