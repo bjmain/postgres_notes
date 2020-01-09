@@ -1,2 +1,12 @@
 # Postgresql notes
 
+INSERT INTO dpr_pur.pur_shape                             # This is the action
+
+SELECT u.year, u.use_no, u.prodno, ST_Centroid(s.geom)    # SELECT selects stuff. You can call variables before you set them. The centroid is a mid-point for a given section. 
+
+FROM dpr_pur.use_data_chemical u                          # set variable
+
+JOIN bmain.sections s ON u.comtrs = s.co_mtrs             # set another variable s = sections
+limit 500                                                 # for testing you can set a limit
+ON CONFLICT (year, use_no, prodno)                        # Skip rows that are missing info.
+DO NOTHING;
