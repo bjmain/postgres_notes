@@ -1,12 +1,35 @@
 # Postgresql notes
 
+### Add centroid data to a blank table called dpr_pur.pur_shape
 INSERT INTO dpr_pur.pur_shape                             # This is the action
-
 SELECT u.year, u.use_no, u.prodno, ST_Centroid(s.geom)    # SELECT selects stuff. You can call variables before you set them. The centroid is a mid-point for a given section. 
-
 FROM dpr_pur.use_data_chemical u                          # set variable
-
 JOIN bmain.sections s ON u.comtrs = s.co_mtrs             # set another variable s = sections
-limit 500                                                 # for testing you can set a limit
+#limit 500                                                 # for testing you can set a limit
 ON CONFLICT (year, use_no, prodno)                        # Skip rows that are missing info.
 DO NOTHING;
+
+
+### count rows
+SELECT count(*) FROM dpr_pur.use_data_chemical
+
+
+### plot centroids that have at least one use
+select distinct p.shape                                                                           # don't plot redundant
+# select count(distinct p.shape)                                                                           # don't plot redundant
+from dpr_pur.use_data_chemical d                                                                  # set up variable
+join dpr_pur.pur_shape p on d.year = p.year and d.use_no =p.use_no and d.prodno = p.prodno        # set up shape variable and join
+where d.year = 2017
+
+### count uses that joined properly with the shape file
+select count(*)
+from dpr_pur.use_data_chemical d
+join dpr_pur.pur_shape p on d.year = p.year and d.use_no =p.use_no and d.prodno = p.prodno
+
+# Identify use numbers without a centroid (do not join)
+SELECT *
+FROM dpr_pur.use_data_chemical d
+LEFT JOIN dpr_pur.pur_shape p ON d.year = p.year AND d.use_no =p.use_no AND d.prodno = p.prodno
+WHERE p.prodno IS NULL
+
+
