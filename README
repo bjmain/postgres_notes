@@ -9,6 +9,20 @@ JOIN bmain.sections s ON u.comtrs = s.co_mtrs             # set another variable
 ON CONFLICT (year, use_no, prodno)                        # Skip rows that are missing info.
 DO NOTHING;
 
+Stuff(someColumn, 1, 4, '')
+This says, starting with the first 1 character position, replace 4 characters with nothing ''
+
+
+### Proposed UPDATED mtrs version of Add centroid data to a blank table called dpr_pur.pur_shape
+INSERT INTO dpr_pur.pur_shape_MTRS                            # This is the action
+
+SELECT u.year, u.use_no, u.prodno, ST_Centroid(s.geom)        # SELECT selects stuff. You can call variables before you set them. The centroid is a mid-point for a given section. 
+FROM dpr_pur.use_data_chemical u                              # set variable
+JOIN bmain.sections s ON stuff(u.comtrs,1,2, '') = s.mtrs     # set another variable s = sections
+limit 10                                                    # for testing you can set a limit
+ON CONFLICT (year, use_no, prodno)                            # Skip rows that are missing info.
+DO NOTHING;
+
 
 ### count rows
 SELECT count(*) FROM dpr_pur.use_data_chemical
