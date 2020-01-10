@@ -38,3 +38,8 @@ SELECT *
 FROM bmain.sections p
 WHERE p.co_mtr == "08H19N01W32"
 
+### Plot sections within a specific range
+SELECT *
+FROM bmain.sections p
+WHERE county_cd = '51' and township = '14N' and range = '01E'
+ORDER BY section
